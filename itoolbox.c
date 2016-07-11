@@ -1,6 +1,6 @@
 //=====================================================================
 //
-// itoolbox.c - ¹¤¾ßº¯Êı´ó¼¯ºÏ
+// itoolbox.c - å·¥å…·å‡½æ•°å¤§é›†åˆ
 //
 // NOTE:
 // for more information, please see the readme file.
@@ -12,11 +12,11 @@
 
 
 //=====================================================================
-// ¹¤¾ßº¯Êı
+// å·¥å…·å‡½æ•°
 //=====================================================================
 
-// ÉèÖÃÑÕÉ«£ºµÍ4Î»ÊÇÎÄ×ÖÑÕÉ«£¬¸ß4Î»ÊÇ±³¾°ÑÕÉ«
-// ¾ßÌå±àÂë¿ÉÒÔËÑË÷ ansi color»òÕß 
+// è®¾ç½®é¢œè‰²ï¼šä½4ä½æ˜¯æ–‡å­—é¢œè‰²ï¼Œé«˜4ä½æ˜¯èƒŒæ™¯é¢œè‰²
+// å…·ä½“ç¼–ç å¯ä»¥æœç´¢ ansi coloræˆ–è€… 
 // http://en.wikipedia.org/wiki/ANSI_escape_code
 void console_set_color(int color)
 {
@@ -40,7 +40,7 @@ void console_set_color(int color)
 	#endif
 }
 
-// ÉèÖÃ¹â±êÎ»ÖÃ×óÉÏ½ÇÊÇ£¬ĞĞÓëÁĞ¶¼ÊÇ´Ó1¿ªÊ¼¼ÆÊıµÄ
+// è®¾ç½®å…‰æ ‡ä½ç½®å·¦ä¸Šè§’æ˜¯ï¼Œè¡Œä¸åˆ—éƒ½æ˜¯ä»1å¼€å§‹è®¡æ•°çš„
 void console_cursor(int row, int col)
 {
 	#ifdef _WIN32
@@ -53,7 +53,7 @@ void console_cursor(int row, int col)
 	#endif
 }
 
-// »Ö¸´ÆÁÄ»ÑÕÉ«
+// æ¢å¤å±å¹•é¢œè‰²
 void console_reset(void)
 {
 	#ifdef _WIN32
@@ -63,7 +63,7 @@ void console_reset(void)
 	#endif
 }
 
-// ÇåÆÁ
+// æ¸…å±
 void console_clear(int color)
 {
 	#ifdef _WIN32
@@ -221,7 +221,7 @@ int icsv_reader_read(iCsvReader *reader)
 		reader->strings = NULL;
 	}
 	reader->count = 0;
-	if (reader->source) {	// Ê¹ÓÃÎÄ±¾Ä£Ê½
+	if (reader->source) {	// ä½¿ç”¨æ–‡æœ¬æ¨¡å¼
 		ivalue_t *str;
 		if (reader->line >= reader->source->count) {
 			istring_list_delete(reader->source);
@@ -611,5 +611,44 @@ int icsv_writer_push_double(iCsvWriter *writer, double x)
 	sprintf(digit, "%f", (float)x);
 	return icsv_writer_push_cstr(writer, digit, -1);
 }
+
+
+//=====================================================================
+// å…¼å®¹æ¥å£å®ç°
+//=====================================================================
+int inet_open_port(unsigned short port, unsigned long ip, int flag)
+{
+	struct sockaddr remote;
+	isockaddr_set(&remote, ip, port);
+	return isocket_udp_open(&remote, 0, (flag & 1)? 512 : 0);
+}
+
+int inet_tcp_estab(int fd)
+{
+	return isocket_tcp_estab(fd);
+}
+
+
+int inet_init(void)
+{
+	return isocket_init();
+}
+
+int inet_set_bufsize(int fd, long recvbuf, long sndbuf)
+{
+	return isocket_set_buffer(fd, recvbuf, sndbuf);
+}
+
+int inet_updateaddr(int resolvename)
+{
+	return isocket_update_address(resolvename);
+}
+
+int inet_sockpair(int fds[2])
+{
+	return isocket_pair(fds, 1);
+}
+
+
 
 
